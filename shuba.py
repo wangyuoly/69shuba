@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-# import bs4
 
 def 爬取目录(目录链接):
     headers = {
@@ -19,9 +18,7 @@ def 爬取目录(目录链接):
     all_a = ul.find_all('a')
     目录列表 = []
 
-
     for a in all_a:
-        # <a target="_blank" href="https://69shuba.cx/txt/44468/40071865">第620章 磁场强者速成之火红道</a>
         章节链接 = a["href"]
         目录列表.append(章节链接)
 
@@ -85,25 +82,24 @@ def 生成json(小说名字,目录链接):
     with open(f"{小说名字}.json",'w',encoding='utf-8') as 文件:
         json.dump(章节JSON,文件,ensure_ascii=False,indent=4)
 
+def 爬取所有章节(书名):
+    with open(f"{书名}.json",'r',encoding='utf-8') as 文件:
+        章节JSON = json.load(文件)
+
+    for 章节 in 章节JSON:
+        print(章节["序号"])
+        if 章节["是否成功"] == False:
+            未处理内容 = 爬取章节(章节["章节链接"])
+            处理后内容 = 处理章节(未处理内容)
+            章节["正文"]= 处理后内容
+            章节["是否成功"] = True
+
+            with open("我在精灵世界浪到失联.json",'w',encoding='utf-8') as 文件:
+                json.dump(章节JSON,文件,ensure_ascii=False,indent=4)
+
+def 合并章节(书名):
+    pass
 
 # 生成json("我在精灵世界浪到失联","https://69shuba.cx/book/44468/")
-with open("我在精灵世界浪到失联.json",'r',encoding='utf-8') as 文件:
-    章节JSON = json.load(文件)
-
-# print(章节JSON)
-for 章节 in 章节JSON:
-    print(章节["序号"])
-    # if 章节["是否成功"] == False:
-    if 章节["正文"] == "":
-        未处理内容 = 爬取章节(章节["章节链接"])
-        处理后内容 = 处理章节(未处理内容)
-        章节["正文"]= 处理后内容
-        章节["是否成功"] = True
-
-        with open("我在精灵世界浪到失联.json",'w',encoding='utf-8') as 文件:
-            json.dump(章节JSON,文件,ensure_ascii=False,indent=4)
-
-
-
-
-# 长度 = len(目录列表)
+爬取所有章节("我在精灵世界浪到失联")
+合并章节("我在精灵世界浪到失联")
