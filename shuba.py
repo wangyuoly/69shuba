@@ -98,8 +98,15 @@ def 爬取所有章节(书名):
                 json.dump(章节JSON,文件,ensure_ascii=False,indent=4)
 
 def 合并章节(书名):
-    pass
+    with open(f"{书名}.json",'r',encoding='utf-8') as 文件:
+        真章节json=json.load(文件)
+        完整章节=""
+        for 章节 in 真章节json:
+            完整章节内容=章节["正文"]+"\n\n"
+
+            with open(f"{书名}.txt","a",encoding='utf-8') as 文件:
+                文件.write(完整章节内容)
 
 # 生成json("我在精灵世界浪到失联","https://69shuba.cx/book/44468/")
-爬取所有章节("我在精灵世界浪到失联")
-合并章节("我在精灵世界浪到失联")
+# 爬取所有章节("我在精灵世界浪到失联")
+# 合并章节("我在精灵世界浪到失联")
